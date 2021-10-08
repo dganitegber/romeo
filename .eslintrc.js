@@ -7,10 +7,13 @@ module.exports = {
         "plugin:vue/essential",
         "eslint:recommended",
         "@vue/typescript/recommended",
-        "@vue/prettier",
-        "@vue/prettier/@typescript-eslint",
+        // "@vue/prettier",
+        // "@vue/prettier/@typescript-eslint",
     ],
     parserOptions: {
+        parserOptions: {
+            parser: "babel-eslint",
+        },
         // ecmaVersion: 2020,
         ecmaFeatures: {
             legacyDecorators: true,

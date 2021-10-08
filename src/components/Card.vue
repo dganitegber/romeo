@@ -1,15 +1,82 @@
 <template>
-    <v-card>
-        <h2>hello</h2>
-    </v-card>
+    <div>
+        <div v-for="(user, i) in users" :key="i">
+            <v-card
+                mt-5
+                max-width="fit-content"
+                class="userCard"
+                elevation="2"
+                outlined
+            >
+                <v-img max-width="200px" :src="user.url"></v-img>
+                <v-card-title> {{ user.name }}</v-card-title>
+                <!-- <v-card-subtitle>User ID: {{ user.id }}</v-card-subtitle>
+                <v-card-subtitle
+                    >Last Login: {{ user.last_login }}</v-card-subtitle
+                >
+                
+                <v-card-subtitle>{{ user.is_plus }}</v-card-subtitle>
+                <v-card-subtitle
+                    >Online Status: {{ user.online_status }}</v-card-subtitle
+                > -->
+            </v-card>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
+    // interface user {
+    //     id: number;
+    //     name: "";
+    //     is_plus: boolean;
+    //     last_login: Date;
+    //     online_status: "";
+    //     picture: {
+    //         comment: "";
+    //         url: "";
+    //     };
+    // picture_url:
+
+    // }
+
     import { Component, Vue } from "vue-property-decorator";
-    // import { component } from "vue/types/umd";
-    // import axios from "axios";
-    @Component
-    export default class Card extends Vue {}
+    import axios from "axios";
+    @Component({
+        props: ["card"],
+    })
+    export default class Card extends Vue {
+        public mainUrl = "http://localhost:3000";
+        public users = [];
+        public async beforeMount() {
+            //neesd to be async to enable to axios function which is asynchronous.
+            console.log("hi");
+            try {
+                await axios({
+                    url: `${this.mainUrl}/api/search?length=32`,
+                    method: "GET",
+                }).then((res) => {
+                    //there has to be a better way to assign a type to this but multiple options i tried did not work
+                    // console.log("res.data", res.data.items);
+                    res.data.items.forEach((element) => {
+                        if (element.picture) {
+                            // element.picure.comment = element.comment;
+                            element.url = element.picture.url;
+                        }
+                    });
+                    this.users = res.data.items;
+                });
+            } catch {
+                (err: undefined) => {
+                    console.log(err);
+                };
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+        public mounted() {
+            console.log("this.users", this.users);
+        }
+    }
 </script>
 
 <style></style>
