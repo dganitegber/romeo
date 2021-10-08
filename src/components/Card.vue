@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 <template>
     <v-container d-flex flex-wrap>
         <div v-for="(user, i) in users" :key="i">
             <v-card
+                @click.stop="openMe(user)"
                 max-width="fit-content"
                 class="userCard mr-5 mb-5 wrap"
                 elevation="2"
@@ -46,6 +48,9 @@
     export default class Card extends Vue {
         public mainUrl = "http://localhost:3000";
         public users = [];
+        public openMe(user) {
+            
+        }
         public async beforeMount() {
             //neesd to be async to enable to axios function which is asynchronous.
             console.log("hi");
@@ -55,7 +60,6 @@
                     method: "GET",
                 }).then((res) => {
                     //there has to be a better way to assign a type to this but multiple options i tried did not work
-                    // console.log("res.data", res.data.items);
                     res.data.items.forEach((element) => {
                         if (element.picture) {
                             // element.picure.comment = element.comment;
@@ -65,7 +69,6 @@
                         }
                     });
                     this.users = res.data.items;
-                    console.log(this.users);
                 });
             } catch {
                 (err: undefined) => {
@@ -75,9 +78,6 @@
         }
 
         // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-        public mounted() {
-            console.log("this.users", this.users);
-        }
     }
 </script>
 
