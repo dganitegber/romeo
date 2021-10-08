@@ -1,8 +1,12 @@
 <template>
-    <div id="app">
-        <img alt="Vue logo" src="./assets/logo.png" />
-        <Card />
-    </div>
+    <v-app>
+        <v-main>
+            <div id="app">
+                <img alt="Vue logo" src="./assets/logo.png" />
+                <Card />
+            </div>
+        </v-main>
+    </v-app>
 </template>
 
 <script lang="ts">

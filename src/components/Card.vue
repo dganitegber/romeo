@@ -1,10 +1,9 @@
 <template>
-    <div>
+    <v-container d-flex flex-wrap>
         <div v-for="(user, i) in users" :key="i">
             <v-card
-                mt-5
                 max-width="fit-content"
-                class="userCard"
+                class="userCard mr-5 mb-5 wrap"
                 elevation="2"
                 outlined
             >
@@ -21,7 +20,7 @@
                 > -->
             </v-card>
         </div>
-    </div>
+    </v-container>
 </template>
 
 <script lang="ts">
@@ -61,9 +60,12 @@
                         if (element.picture) {
                             // element.picure.comment = element.comment;
                             element.url = element.picture.url;
+                        } else {
+                            element.url = "../assets/no-picture.jpg";
                         }
                     });
                     this.users = res.data.items;
+                    console.log(this.users);
                 });
             } catch {
                 (err: undefined) => {
