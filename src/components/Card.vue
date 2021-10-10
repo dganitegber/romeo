@@ -3,6 +3,7 @@
     <v-card
         @click.stop="openMe(user)"
         max-width="fit-content"
+        min-width="25vw"
         class="userCard mr-5 mb-5 wrap"
         elevation="2"
         outlined
@@ -55,11 +56,14 @@
     @Component
     export default class Card extends Vue {
         @Prop({ type: Object, required: true }) user!: User;
+        // @Prop({ type: Object, required: true }) userProfile!: UserProfile;
+
         public mainUrl = "http://localhost:3000";
         public selectedUser = {};
-        public userProfile = {};
+        private userProfile: UserProfile | null = null;
 
         public async beforeMount(): Promise<void> {
+            // console.log("this.user", this);
             //neesd to be async to enable to axios function which is asynchronous.
             try {
                 await axios({
@@ -67,7 +71,6 @@
                     method: "GET",
                 }).then((res: any) => {
                     this.userProfile = res.data[0];
-                    console.log("this.userProfile", this.userProfile);
                 });
             } catch {
                 (err: any) => {
@@ -76,8 +79,6 @@
             }
         }
         private get onlineStatus() {
-            console.log("status", this.user.online_status);
-            console.log(this.user.online_status);
             if (this.user.online_status === "OFFLINE") {
                 return "red";
             } else if (this.user.online_status === "ONLINE") {
@@ -87,7 +88,7 @@
             }
         }
         private openMe(user: User) {
-            EventBus.$emit("openFullProfile", user);
+            EventBus.$emit("openFullProfile", user, this.userProfile);
         }
 
         private formatDate() {
@@ -117,5 +118,8 @@
     }
     .offline {
         background-color: red;
+    }
+    .v-dialog {
+        overflow-y: unset !important;
     }
 </style>
