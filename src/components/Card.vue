@@ -22,36 +22,44 @@
                 > -->
             </v-card>
         </div>
+        <FullProfile />
     </v-container>
 </template>
 
 <script lang="ts">
-    // interface user {
-    //     id: number;
-    //     name: "";
-    //     is_plus: boolean;
-    //     last_login: Date;
-    //     online_status: "";
-    //     picture: {
-    //         comment: "";
-    //         url: "";
-    //     };
-    // picture_url:
-
-    // }
+    export interface user {
+        id: number;
+        name: "";
+        is_plus: boolean;
+        last_login: Date;
+        online_status: "";
+        url: "";
+    }
 
     import { Component, Vue } from "vue-property-decorator";
     import axios from "axios";
+    import { EventBus } from "../plugins/event-bus";
+    import FullProfile from "./FullProfile.vue";
+
     @Component({
-        props: ["card"],
+        components: { FullProfile },
+        props: {
+            user: { type: Object, default: () => ({}) },
+        },
     })
     export default class Card extends Vue {
         public mainUrl = "http://localhost:3000";
         public users = [];
-        public openMe(user) {
-            
+        public selectedUser = [];
+
+        public openMe(user: any) {
+            this.selectedUser = user;
+            // this.$props.user = user;
+            // console.log("props", this.$props);
+            EventBus.$emit("openFullUser", true);
         }
         public async beforeMount() {
+            console.log("this.user", this.$props.user);
             //neesd to be async to enable to axios function which is asynchronous.
             console.log("hi");
             try {
@@ -65,7 +73,8 @@
                             // element.picure.comment = element.comment;
                             element.url = element.picture.url;
                         } else {
-                            element.url = "../assets/no-picture.jpg";
+                            element.url =
+                                "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dW5pdmVyc2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80";
                         }
                     });
                     this.users = res.data.items;
