@@ -1,8 +1,8 @@
 <template>
-    <v-dialog v-model="fullProfileDialog" width="500">
-        <v-card>
+    <v-dialog v-model="isOpen" width="500">
+        <v-card v-if="userInitialized">
             <v-card-title class="text-h5">
-                {{ $props.user }}
+                <v-img :src="pictureUrl" />
             </v-card-title>
 
             <v-card-text>
@@ -23,23 +23,53 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
+        <div v-else>
+            hi loader
+        </div>
     </v-dialog>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import axios from "axios";
     import { EventBus } from "@/plugins/event-bus";
+    import { User } from "@/models/User";
 
     @Component({
         props: [],
     })
     export default class FullProfile extends Vue {
         public fullProfileDialog = false;
-        public mounted() {
-            EventBus.$on("openFullUser", (disable: unknown) => {
-                this.fullProfileDialog = !this.fullProfileDialog;
-            });
+        private isOpen = false;
+        private user: User | null = null;
+
+        private get userInitialized(): boolean {
+            console.log(this.user?.name);
+            return !!this.user;
+        }
+
+        private get pictureUrl(): string {
+            return this.user?.picture?.url || require("@/assets/no-image.jpg");
+        }
+
+        private created() {
+            EventBus.$on("openFullProfile", this.openFullProfile);
+            EventBus.$on("closeFullProfile", this.closeFullProfile);
+        }
+
+        private destroyed() {
+            EventBus.$off("openFullProfile", this.openFullProfile);
+            EventBus.$off("closeFullProfile", this.closeFullProfile);
+        }
+
+        private openFullProfile(user: User) {
+            this.user = user;
+            console.log(this.user);
+            this.isOpen = true;
+        }
+
+        private closeFullProfile() {
+            this.isOpen = false;
+            this.user = null;
         }
     }
 </script>

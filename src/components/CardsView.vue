@@ -9,7 +9,7 @@
                 elevation="2"
                 outlined
             >
-                <v-img max-width="200px" :src="user.url"></v-img>
+                <v-img max-width="200px" :src="getUserPictureUrl(user)"></v-img>
                 <v-card-title> {{ user.name }}</v-card-title>
                 <!-- <v-card-subtitle>User ID: {{ user.id }}</v-card-subtitle>
                 <v-card-subtitle
@@ -22,65 +22,42 @@
                 > -->
             </v-card>
         </div>
-        <FullProfile />
     </v-container>
 </template>
 
 <script lang="ts">
-    export interface user {
-        id: number;
-        name: "";
-        is_plus: boolean;
-        last_login: Date;
-        online_status: "";
-        url: "";
-    }
-
     import { Component, Vue } from "vue-property-decorator";
     import axios from "axios";
     import { EventBus } from "../plugins/event-bus";
     import FullProfile from "./FullProfile.vue";
+    import { User } from "@/models/User";
 
     @Component({
         components: { FullProfile },
-        props: {
-            user: { type: Object, default: () => ({}) },
-        },
     })
     export default class Card extends Vue {
         public mainUrl = "http://localhost:3000";
-        public users = [];
-        public selectedUser = [];
+        public users: User[] = [];
 
-        public openMe(user: any) {
-            this.selectedUser = user;
-            // this.$props.user = user;
-            // console.log("props", this.$props);
-            EventBus.$emit("openFullUser", true);
+        private openMe(user: User) {
+            EventBus.$emit("openFullProfile", user);
         }
-        public async beforeMount() {
-            console.log("this.user", this.$props.user);
+            
+        private getUserPictureUrl(user: User): string {
+            return user?.picture?.url || require("@/assets/no-image.jpg");
+        }
+
+        public async beforeMount(): Promise<void> {
             //neesd to be async to enable to axios function which is asynchronous.
-            console.log("hi");
             try {
                 await axios({
                     url: `${this.mainUrl}/api/search?length=32`,
                     method: "GET",
-                }).then((res) => {
-                    //there has to be a better way to assign a type to this but multiple options i tried did not work
-                    res.data.items.forEach((element) => {
-                        if (element.picture) {
-                            // element.picure.comment = element.comment;
-                            element.url = element.picture.url;
-                        } else {
-                            element.url =
-                                "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dW5pdmVyc2V8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80";
-                        }
-                    });
-                    this.users = res.data.items;
+                }).then((res: any) => {
+                    this.users = res?.data?.items || [];
                 });
             } catch {
-                (err: undefined) => {
+                (err: any) => {
                     console.log(err);
                 };
             }

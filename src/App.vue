@@ -2,8 +2,8 @@
     <v-app>
         <v-main>
             <div id="app">
-                <img alt="Vue logo" src="./assets/logo.png" />
-                <Card />
+                <CardsView />
+                <FullProfile />
             </div>
         </v-main>
     </v-app>
@@ -11,15 +11,18 @@
 
 <script lang="ts">
     import { Component, Vue } from "vue-property-decorator";
-    import Card from "./components/Card.vue";
-    // import CardsView from "./components/CardsView.vue";
+    import CardsView from "./components/CardsView.vue";
+    import FullProfile from "./components/FullProfile.vue";
 
     @Component({
         components: {
-            Card,
+            CardsView,
+            FullProfile,
         },
     })
-    export default class App extends Vue {}
+    export default class App extends Vue {
+        // bus listen to card click:
+    }
 </script>
 
 <style lang="scss">
@@ -30,5 +33,12 @@
         text-align: center;
         color: #2c3e50;
         margin-top: 60px;
+    }
+
+    .full-profile {
+        opacity: 0;
+        &--open {
+            opacity: 1;
+        }
     }
 </style>
