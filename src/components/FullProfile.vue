@@ -43,7 +43,6 @@
         private user: User | null = null;
 
         private get userInitialized(): boolean {
-            console.log(this.user?.name);
             return !!this.user;
         }
 
@@ -63,7 +62,6 @@
 
         private openFullProfile(user: User) {
             this.user = user;
-            console.log(this.user);
             this.isOpen = true;
         }
 

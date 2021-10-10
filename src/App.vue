@@ -34,11 +34,4 @@
         color: #2c3e50;
         margin-top: 60px;
     }
-
-    .full-profile {
-        opacity: 0;
-        &--open {
-            opacity: 1;
-        }
-    }
 </style>
