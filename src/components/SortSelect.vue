@@ -2,7 +2,7 @@
     <v-col class="d-flex" cols="12" sm="6">
         <v-select
             :items="items"
-            label="Distance"
+            label="Sort by:"
             @change="sort($event)"
         ></v-select>
     </v-col>

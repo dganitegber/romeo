@@ -27,6 +27,7 @@
                         >
                         </span>
                     </template>
+                    <span>{{ user.online_status }}</span>
                 </v-tooltip>
             </v-row>
             <v-row>
@@ -73,7 +74,7 @@
                     url: `${this.mainUrl}/api/profiles?ids=${this.user.id}`,
                     method: "GET",
                 }).then((res: any) => {
-                    this.userProfile = res.data[0];
+                    this.userProfile = res?.data[0];
                 });
             } catch {
                 (err: any) => {
