@@ -35,6 +35,8 @@ and in addition had some issues as most of the times I was asked to change the "
 with an object and the linter informed me that working with objects is not recommended... so, I assume this could be done better as well.
  
 *I really wanted to implement a sorting by status (online, date etc.) but this is something which should also be enabled in the backend if I'm not mistaken. That would have been my next step anyway, together with beautifying the main profile card (I do hope you clicked on each card to open a "fuller" profile. Well, theoretically fuller anyway).
+
+*Cors issue: cors wasn't enabled on the server. As a result, I wasn't able to access the BE from the "normal" browser. I used the trick in which you open the browser from cmd using "chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security". This allowed me to access the backend and fetch the images, however I do acknowledge that this might be considered to be more of a hack rather than a proper solution. I would be of course open and happy to learn about it.
  
 In conclusion, this was a fun task, I enjoyed doing it, I have built similar apps both in my bootcamp and in my current position.
 It might be a little bit more time consuming, however regarding programming level, I'm of the opinion it can be considered as a task for a junior position. I hope ;)
