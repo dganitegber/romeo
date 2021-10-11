@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 <template>
     <v-container d-flex flex-wrap justify-content="center">
-        <div v-for="(user, i) in users" :key="i">
-            <Card :user="user" />
-        </div>
+        <v-row>
+            <SortSelect />
+        </v-row>
+        <v-row>
+            <div v-for="(user, i) in users" :key="i">
+                <Card :user="user" />
+            </div>
+        </v-row>
     </v-container>
 </template>
 
@@ -13,19 +18,38 @@
     import FullProfile from "./FullProfile.vue";
     import Card from "./Card.vue";
     import { User } from "@/models/User";
+    import SortSelect from "./SortSelect.vue";
+    import { EventBus } from "@/plugins/event-bus";
 
     @Component({
-        components: { FullProfile, Card },
+        components: { SortSelect, FullProfile, Card },
     })
     export default class CardsView extends Vue {
         public mainUrl = "http://localhost:3000";
         public users: User[] = [];
+        public getPhrase = "/api/search?length=32";
 
         public async beforeMount(): Promise<void> {
-            //neesd to be async to enable to axios function which is asynchronous.
+            this.getCards();
+        }
+
+        private created() {
+            EventBus.$on("sortCards", (event: any) => {
+                if (event === "Last Seen") {
+                    this.getPhrase = this.getPhrase + "&sorting=" + "ACTIVITY";
+                    this.getCards();
+                } else {
+                    this.getPhrase =
+                        this.getPhrase + "&sorting=" + event.toUpperCase();
+                    this.getCards();
+                }
+            });
+        }
+
+        private async getCards() {
             try {
                 await axios({
-                    url: `${this.mainUrl}/api/search?length=32`,
+                    url: `${this.mainUrl}${this.getPhrase}`,
                     method: "GET",
                 }).then((res: any) => {
                     this.users = res?.data?.items || [];
@@ -34,6 +58,8 @@
                 (err: any) => {
                     console.log(err);
                 };
+            } finally {
+                this.getPhrase = "/api/search?length=32";
             }
         }
 

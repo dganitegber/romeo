@@ -30,7 +30,10 @@
                 </v-tooltip>
             </v-row>
             <v-row>
-                <span> Last online: {{ formatDate() }} </span>
+                <span>
+                    Last online: {{ formatDate() }} | Distance:
+                    {{ userProfile.location.distance }}km
+                </span>
             </v-row>
         </v-col>
 
