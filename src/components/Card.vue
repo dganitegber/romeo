@@ -6,14 +6,16 @@
         min-width="25vw"
         class="userCard mr-5 mb-5 wrap"
         elevation="2"
+        color="white"
         outlined
     >
-        <v-img max-width="300px" :src="pictureUrl" />
+        <v-img min-width="300px" max-width="28vw" :src="pictureUrl" />
         <v-col>
-            <v-row>
+            <v-row class="justify-center">
                 <v-card-title>
-                    {{ userProfile.personal.age }} |
-                    {{ user.name }}</v-card-title
+                    <span
+                        >{{ individualAge }} | {{ user.name }}</span
+                    ></v-card-title
                 >
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -31,22 +33,15 @@
                 </v-tooltip>
             </v-row>
             <v-row>
-                <span>
+                <v-card-text>
                     Last online: {{ formatDate() }} | Distance:
-                    {{ userProfile.location.distance }}km
-                </span>
+                    {{ individualLocation }}km
+                </v-card-text>
+                <v-card-subtitle>
+                    <span class="headline"> "{{ headline }}" </span>
+                </v-card-subtitle>
             </v-row>
         </v-col>
-
-        <!-- <v-card-subtitle>User ID: {{ user.id }}</v-card-subtitle>
-                <v-card-subtitle
-                    >Last Login: {{ user.last_login }}</v-card-subtitle
-                >
-                
-                <v-card-subtitle>{{ user.is_plus }}</v-card-subtitle>
-                <v-card-subtitle
-                    >Online Status: {{ user.online_status }}</v-card-subtitle
-                > -->
     </v-card>
 </template>
 
@@ -60,15 +55,12 @@
     @Component
     export default class Card extends Vue {
         @Prop({ type: Object, required: true }) user!: User;
-        // @Prop({ type: Object, required: true }) userProfile!: UserProfile;
 
         public mainUrl = "http://localhost:3000";
         public selectedUser = {};
         private userProfile: UserProfile | null = null;
 
         public async beforeMount(): Promise<void> {
-            // console.log("this.user", this);
-            //neesd to be async to enable to axios function which is asynchronous.
             try {
                 await axios({
                     url: `${this.mainUrl}/api/profiles?ids=${this.user.id}`,
@@ -103,15 +95,29 @@
             return this.user?.picture?.url || require("@/assets/no-image.jpg");
         }
 
-        // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+        private get individualLocation() {
+            return this.userProfile?.location?.distance;
+        }
+
+        private get individualAge() {
+            return this.userProfile?.personal?.age;
+        }
+
+        private get headline() {
+            return this.userProfile?.headline;
+        }
     }
 </script>
 
 <style>
+    .headline {
+        font-size: 0.8rem !important;
+        font-style: italic !important;
+    }
     .dot {
         height: 15px;
         width: 15px;
-        margin-top: 25px;
+        margin-top: 20px;
         border-radius: 50%;
         display: inline-block;
 

@@ -21,7 +21,6 @@
         },
     })
     export default class App extends Vue {
-        // bus listen to card click:
     }
 </script>
 

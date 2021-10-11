@@ -1,23 +1,23 @@
 <template>
-    <v-dialog v-model="isOpen" width="60vw">
-        <v-card d-flex dir="col" v-if="userInitialized">
+    <v-dialog v-model="isOpen" max-width="70vw">
+        <v-card
+            d-flex
+            dir="col"
+            v-if="userInitialized"
+            color="black"
+            font="white"
+        >
             <v-row>
-                <v-col>
-                    <v-card-title class="text-h5">
+                <v-col class="pt-0">
+                    <v-card-title class="text-h5 pa-0">
                         <v-img :src="pictureUrl" />
                     </v-card-title>
                 </v-col>
                 <v-col>
                     <v-card-text d-flex>
-                        <p>
-                            {{ fullProfile.personal.age }}
-                        </p>
-                        <p>
-                            {{ user.name }}
-                        </p>
-                        <p>
-                            {{ fullProfile.personal.height.cm }}
-                        </p>
+                        <p>Age: {{ fullProfile.personal.age }}</p>
+                        <p>Name: {{ user.name }}</p>
+                        <p>Heigth (cm): {{ fullProfile.personal.height.cm }}</p>
                     </v-card-text>
                 </v-col>
             </v-row>
@@ -42,7 +42,6 @@
 
     @Component({})
     export default class FullProfile extends Vue {
-        // @Prop({ type: Object, required: true }) userProfile!: UserProfile;
 
         public fullProfileDialog = false;
         private isOpen = false;
@@ -67,10 +66,9 @@
             EventBus.$off("closeFullProfile", this.closeFullProfile);
         }
 
-        private openFullProfile(user: User, fullProfile: FullProfile) {
+        private openFullProfile(user: User, fullProfile: UserProfile) {
             this.user = user;
             this.fullProfile = fullProfile;
-            console.log(this.fullProfile);
             this.isOpen = true;
         }
 
@@ -81,4 +79,26 @@
     }
 </script>
 
-<style></style>
+<style scoped>
+    .v-card {
+        overflow: unset;
+        color: white !important;
+    }
+
+    .v-btn {
+        transition: background-color 300ms ease-out 100ms;
+    }
+
+    @keyframes color-fade {
+        from {
+            background-color: transparent;
+        }
+        to {
+            background-color: transparent;
+        }
+    }
+
+    .v-btn:hover {
+        background-color: rgb(54, 121, 54);
+    }
+</style>
