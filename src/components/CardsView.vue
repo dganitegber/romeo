@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 <template>
     <v-container d-flex flex-wrap justify-content="center">
         <v-row>
@@ -62,7 +61,6 @@
                 this.getPhrase = "/api/search?length=32";
             }
         }
-
     }
 </script>
 
